@@ -30,14 +30,6 @@ void            ChainedMap::insert(const std::string &key, const std::string &va
         resize(table_size);
         load_factor = nitems / table_size;
     }
-
-    /*
-    0: map = {'noah': 'danica', 'tim' : 'sami's girlfriend who likes musicals'}
-    1: map = {}
-    2: map = {}
-    3:
-    4:
-    */
 }
 
 const Entry     ChainedMap::search(const std::string &key) {
@@ -47,13 +39,6 @@ const Entry     ChainedMap::search(const std::string &key) {
 
     auto   it = hash_table[hash_key].find(key);
     if(it != hash_table[hash_key].end()) return *it;
-
-    // if(hash_table[hash_key].size() == 1) {
-    //     // TODO fix conditional jump on uninitialzed values (assuming it, or it->first are uninitialized)
-    //     if(!((it->first).empty()) && (it->first== key)){
-    //         return *it;
-    //     }
-    // }
 
     return NONE;
 }
