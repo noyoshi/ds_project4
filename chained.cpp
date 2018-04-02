@@ -1,6 +1,7 @@
 // chained.cpp: Separate Chaining Map
 
 #include "map.h"
+#include <vector>
 
 #include <stdexcept>
 
@@ -20,14 +21,12 @@ ChainedMap::~ChainedMap(){
 
 void            ChainedMap::insert(const std::string &key, const std::string &value) {
     size_t hash_key = hash_function(key) % table_size;
-    auto bucket = hash_table + sizeof(*hash_table) * hash_key;
-    (*bucket)[key] = value;
+    hash_table[hash_key][key] = value;    
 
     load_factor = ++nitems / (double) table_size;
 
     if (load_factor > DEFAULT_LOAD_FACTOR){
         table_size = table_size * 2;
-        // Segfaults here?
         resize(table_size);
         load_factor = nitems / table_size;
     }
@@ -43,14 +42,15 @@ void            ChainedMap::insert(const std::string &key, const std::string &va
 
 const Entry     ChainedMap::search(const std::string &key) {
     size_t hash_key = hash_function(key) % table_size;
-    auto bucket = hash_table + (sizeof(*hash_table) * hash_key);
-    if(bucket->empty()) return NONE;
 
-    auto   it = bucket->find(key);
-    if(it != bucket->end()) return *it;
+    if(hash_table[hash_key].empty()) return NONE;
 
-    if(bucket->size() == 1) {
-        if(it->first == key){
+    auto   it = hash_table[hash_key].find(key);
+    if(it != hash_table[hash_key].end()) return *it;
+
+    if(hash_table[hash_key].size() == 1) {
+        // TODO fix conditional jump on uninitialzed values (assuming it, or it->first are uninitialized)
+        if(!((it->first).empty()) && (it->first== key)){
             return *it;
         }
     }
@@ -60,8 +60,7 @@ const Entry     ChainedMap::search(const std::string &key) {
 
 void            ChainedMap::dump(std::ostream &os, DumpFlag flag) {
     for(size_t i = 0; i < table_size; i ++){
-        auto bucket = hash_table + (sizeof(*hash_table) * i);
-        for(auto it = bucket->begin(); it !=bucket->end(); it++){
+        for(auto it = hash_table[i].begin(); it !=hash_table[i].end(); it++){
             switch (flag){
                 case(DUMP_KEY):
                     os << it->first << '\n';
@@ -90,8 +89,7 @@ void            ChainedMap::resize(const size_t new_size) {
     load_factor = ++nitems / new_size;
 
     for(size_t i = 0; i < old_size; i ++){
-        auto bucket = hash_table + (sizeof(*hash_table) * i);
-        for(auto it = bucket->begin(); it != bucket->end(); it++){
+        for(auto it = old_table[i].begin(); it != old_table[i].end(); it++){
             insert(it->first, it->second);
         }
     }
