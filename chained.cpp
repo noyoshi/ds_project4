@@ -48,12 +48,12 @@ const Entry     ChainedMap::search(const std::string &key) {
     auto   it = hash_table[hash_key].find(key);
     if(it != hash_table[hash_key].end()) return *it;
 
-    if(hash_table[hash_key].size() == 1) {
-        // TODO fix conditional jump on uninitialzed values (assuming it, or it->first are uninitialized)
-        if(!((it->first).empty()) && (it->first== key)){
-            return *it;
-        }
-    }
+    // if(hash_table[hash_key].size() == 1) {
+    //     // TODO fix conditional jump on uninitialzed values (assuming it, or it->first are uninitialized)
+    //     if(!((it->first).empty()) && (it->first== key)){
+    //         return *it;
+    //     }
+    // }
 
     return NONE;
 }
