@@ -19,7 +19,7 @@ typedef std::chrono::high_resolution_clock  Clock;
 
 void usage(int status) {
     std::cout << "usage: map_bench" << std::endl
-              << "    -b BACKEND    Which Map backend (unsorted, sorted, bst, rbtree, treap)" << std::endl
+              << "    -b BACKEND    Which Map backend (unsorted, sorted, bst, rbtree, treap, chained, open)" << std::endl
               << "    -n NITEMS     Number of items to benchmark" << std::endl
               << "    -p PADLENGTH  Amount to pad the keys with leading 0's" << std::endl;
 
@@ -42,6 +42,12 @@ void parse_command_line_options(int argc, char *argv[], Map *&map, int &nitems, 
                     map = new RBTreeMap();
                 } else if (strcasecmp(optarg, "treap") == 0) {
                     map = new TreapMap();
+                } else if (strcasecmp(optarg, "chained") == 0) {
+                    // Add in custom load factor
+                    map = new ChainedMap();
+                } else if (strcasecmp(optarg, "open") == 0) {
+                    // Add in custom load factor
+                    map = new OpenMap();
                 } else {
                     usage(1);
                 }

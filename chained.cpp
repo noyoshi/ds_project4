@@ -16,6 +16,13 @@ ChainedMap::ChainedMap(){
     nitems = 0;
     load_factor = 0;
 }
+// Initialized with values 
+ChainedMap::ChainedMap(double f, size_t sz){
+    hash_table = new std::map<std::string, std::string>[sz];
+    table_size = sz;
+    nitems = 0;
+    load_factor = f;
+}
 
 ChainedMap::~ChainedMap(){
     delete[] hash_table;
@@ -27,13 +34,10 @@ void            ChainedMap::insert(const std::string &key, const std::string &va
     size_t hash_key = hash_function(key) % table_size;
     hash_table[hash_key][key] = value;    
 
-    load_factor = ++nitems / (double) table_size;
+    load_factor = ((double) ++nitems) / ((double) table_size);
 
-    if (load_factor > DEFAULT_LOAD_FACTOR){
-        table_size = table_size * 2;
-        resize(table_size);
-        load_factor = nitems / table_size;
-    }
+    if (load_factor > DEFAULT_LOAD_FACTOR)
+        resize(table_size * 2);
 }
 
 const Entry     ChainedMap::search(const std::string &key) {
@@ -69,19 +73,20 @@ void            ChainedMap::dump(std::ostream &os, DumpFlag flag) {
 }
 
 void            ChainedMap::resize(const size_t new_size) {
-    auto old_size = table_size;
-    auto old_table = hash_table;
-
-    hash_table = new std::map<std::string, std::string>[new_size];
+    size_t old_size = table_size;
     table_size = new_size;
+    
+    load_factor = ((double) nitems) / ((double) table_size);
 
-    load_factor = ++nitems / new_size;
+    auto old_table = hash_table;
+    hash_table = new std::map<std::string, std::string>[table_size];
 
     for(size_t i = 0; i < old_size; i ++){
         for(auto it = old_table[i].begin(); it != old_table[i].end(); it++){
             insert(it->first, it->second);
         }
     }
+
     delete[] old_table;
 }
 

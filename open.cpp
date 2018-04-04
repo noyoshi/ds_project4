@@ -18,6 +18,18 @@ OpenMap::OpenMap(){
     }
 }
 
+// Initialized with values
+OpenMap::OpenMap(double f, size_t sz){
+    hash_table = new Entry [sz];
+    table_size = sz;
+    nitems = 0;
+    load_factor = f;
+    for(size_t i = 0; i < table_size; i ++){
+        // Initialzes everything to NONE 
+        hash_table[i] = NONE; 
+    }
+}
+
 OpenMap::~OpenMap(){
     delete[] hash_table;
 }
@@ -28,17 +40,13 @@ void OpenMap::insert(const std::string &key, const std::string &value) {
     // size_t hash_key = hash_function(key) % table_size;
 
     size_t hash_key = locate(key); 
-
     hash_table[hash_key] = std::make_pair(key, value);
     
 
-    load_factor = ++nitems / (double) table_size;
+    load_factor = ((double) ++nitems) / ((double) table_size);
 
-    if (load_factor > DEFAULT_LOAD_FACTOR){
-        table_size = table_size * 2;
-        resize(table_size);
-        load_factor = nitems / table_size;
-    }
+    if (load_factor > DEFAULT_LOAD_FACTOR)
+        resize(table_size * 2);
 }
 
 const Entry OpenMap::search(const std::string &key) {
@@ -88,17 +96,23 @@ size_t OpenMap::locate(const std::string &key) {
 }
 
 void OpenMap::resize(const size_t new_size) {
-    auto old_size = table_size;
-    auto old_table = hash_table;
-
-    hash_table = new Entry [new_size];
+    size_t old_size = table_size; 
     table_size = new_size;
+    
+    load_factor = ((double) nitems) / ((double) table_size);
+    
+    auto old_table = hash_table;
+    hash_table = new Entry [table_size];
 
-    load_factor = ++nitems / new_size;
+    // Initialzes everything to NONE 
+    for(size_t i = 0; i < table_size; i ++)
+        hash_table[i] = NONE; 
 
     for(size_t i = 0; i < old_size; i ++){
-        insert(old_table[i].first, old_table[i].second);
+        if(old_table[i] != NONE)
+            insert(old_table[i].first, old_table[i].second);
     }
+
     delete[] old_table;
 }
 

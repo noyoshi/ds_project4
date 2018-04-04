@@ -121,7 +121,9 @@ public:
             const Entry     search(const std::string &key);
             void            dump(std::ostream &os, DumpFlag flag);
             ChainedMap();
+            ChainedMap(double, size_t); 
             ~ChainedMap();
+
 
 private:
             void            resize(const size_t new_size);
@@ -138,6 +140,7 @@ public:
             const Entry     search(const std::string &key);
             void            dump(std::ostream &os, DumpFlag flag);
             OpenMap();
+            OpenMap(double, size_t); 
             ~OpenMap();
 
 private:
