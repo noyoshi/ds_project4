@@ -2,6 +2,11 @@
 
 #include "map.h"
 
+//              __
+//  (woof) -- <(o )___
+//             ( ._> /
+//              `---'   
+
 const Entry  NONE;
 const double DEFAULT_LOAD_FACTOR = 0.9;
 const size_t DEFAULT_TABLE_SIZE  = 1<<10;

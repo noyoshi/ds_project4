@@ -5,6 +5,10 @@
 
 #include <stdexcept>
 
+//              __
+//  (woof) -- <(o )___
+//             ( ._> /
+//              `---'   
 
 ChainedMap::ChainedMap(){
     hash_table = new std::map<std::string, std::string>[1<<10];

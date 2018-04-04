@@ -12,6 +12,11 @@
 #include <utility>
 #include <vector>
 
+//              __     
+//  (woof) -- <(o )___ 
+//             ( ._> / 
+//              `---'   
+
 // Type definitions ------------------------------------------------------------
 
 typedef enum {
@@ -132,10 +137,17 @@ public:
             void            insert(const std::string &key, const std::string &value);
             const Entry     search(const std::string &key);
             void            dump(std::ostream &os, DumpFlag flag);
+            OpenMap();
+            ~OpenMap();
 
 private:
             size_t          locate(const std::string &key);
             void            resize(const size_t new_size);
+            double          nitems;
+            size_t          table_size;
+            double          load_factor;
+            Entry           *hash_table;
+            StringHasher    hash_function;
 };
 
 // vim: set sts=4 sw=4 ts=8 expandtab ft=cpp:
