@@ -8,10 +8,11 @@
 // Ly8gICAgICAgICAgICAgIF9fICAgICANCi8vICAod29vZikgLS0gPChvIClfX18gDQovLyAgICAgICAgICAgICAoIC5fPiAvIA0KLy8gICAgICAgICAgICAgIGAtLS0nICAg 
 
 OpenMap::OpenMap(){
-    hash_table = new Entry [1<<10];
-    table_size = 1<<10;
+    hash_table = new Entry [DEFAULT_TABLE_SIZE];
+    table_size = DEFAULT_TABLE_SIZE;
     nitems = 0;
     load_factor = 0;
+    load_limit = DEFAULT_LOAD_FACTOR; 
     for(size_t i = 0; i < table_size; i ++){
         // Initialzes everything to NONE 
         hash_table[i] = NONE; 
@@ -19,11 +20,24 @@ OpenMap::OpenMap(){
 }
 
 // Initialized with values
-OpenMap::OpenMap(double f, size_t sz){
+OpenMap::OpenMap(double limit){ 
+    hash_table = new Entry [DEFAULT_TABLE_SIZE];
+    table_size = DEFAULT_TABLE_SIZE;
+    nitems = 0;
+    load_factor = 0;
+    load_limit = limit; 
+    for(size_t i = 0; i < table_size; i ++){
+        // Initialzes everything to NONE 
+        hash_table[i] = NONE; 
+    } 
+}
+
+OpenMap::OpenMap(double limit, size_t sz){
     hash_table = new Entry [sz];
     table_size = sz;
     nitems = 0;
-    load_factor = f;
+    load_factor = 0; 
+    load_limit = limit; 
     for(size_t i = 0; i < table_size; i ++){
         // Initialzes everything to NONE 
         hash_table[i] = NONE; 
@@ -45,7 +59,7 @@ void OpenMap::insert(const std::string &key, const std::string &value) {
 
     load_factor = ((double) ++nitems) / ((double) table_size);
 
-    if (load_factor > DEFAULT_LOAD_FACTOR)
+    if (load_factor > load_limit)
         resize(table_size * 2);
 }
 

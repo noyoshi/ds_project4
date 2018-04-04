@@ -121,6 +121,7 @@ public:
             const Entry     search(const std::string &key);
             void            dump(std::ostream &os, DumpFlag flag);
             ChainedMap();
+            ChainedMap(double); 
             ChainedMap(double, size_t); 
             ~ChainedMap();
 
@@ -132,6 +133,7 @@ private:
             double          load_factor;
             std::map<std::string, std::string> *hash_table;
             StringHasher    hash_function;
+            double          load_limit; 
 };
 
 class OpenMap : public Map {
@@ -140,6 +142,7 @@ public:
             const Entry     search(const std::string &key);
             void            dump(std::ostream &os, DumpFlag flag);
             OpenMap();
+            OpenMap(double); 
             OpenMap(double, size_t); 
             ~OpenMap();
 
@@ -151,6 +154,7 @@ private:
             double          load_factor;
             Entry           *hash_table;
             StringHasher    hash_function;
+            double          load_limit; 
 };
 
 // vim: set sts=4 sw=4 ts=8 expandtab ft=cpp:

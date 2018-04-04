@@ -11,15 +11,16 @@
 #include <strings.h>
 #include <unistd.h>
 
-// Type Definitions ------------------------------------------------------------
+// Type Definitions -------------------------s-----------------------------------
 
 typedef std::chrono::high_resolution_clock  Clock;
 
 // Utility functions -----------------------------------------------------------
 
+
 void usage(int status) {
     std::cout << "usage: map_bench" << std::endl
-              << "    -b BACKEND    Which Map backend (unsorted, sorted, bst, rbtree, treap, chained, open)" << std::endl
+              << "    -b BACKEND    Which Map backend (unsorted, sorted, bst, rbtree, treap, unordered, chained, open)" << std::endl
               << "    -n NITEMS     Number of items to benchmark" << std::endl
               << "    -p PADLENGTH  Amount to pad the keys with leading 0's" << std::endl;
 
@@ -30,6 +31,7 @@ void parse_command_line_options(int argc, char *argv[], Map *&map, int &nitems, 
     int c;
 
     while ((c = getopt(argc, argv, "hb:n:p:")) != -1) {
+        std::string str(optarg); 
         switch (c) {
             case 'b':
                 if (strcasecmp(optarg, "unsorted") == 0) {
@@ -43,11 +45,39 @@ void parse_command_line_options(int argc, char *argv[], Map *&map, int &nitems, 
                 } else if (strcasecmp(optarg, "treap") == 0) {
                     map = new TreapMap();
                 } else if (strcasecmp(optarg, "chained") == 0) {
-                    // Add in custom load factor
                     map = new ChainedMap();
                 } else if (strcasecmp(optarg, "open") == 0) {
-                    // Add in custom load factor
                     map = new OpenMap();
+                } else if (strcasecmp(optarg, "unordered") == 0) {
+                    map = new UnorderedMap(); 
+                } else if (str.size() > 4) {
+                    double LIMIT; 
+                    std::string first1 = str.substr(0, 5); 
+                    if(first1 != "open-") {
+                        if(str.size() > 8) { // Not open, could be chained
+                            first1 = str.substr(0, 8);
+                        } else {  // Not valid open 
+                            usage(1); 
+                            break;
+                        }   
+                    } else {
+                        // valid open 
+                        std::string second = str.substr(5); 
+                        LIMIT = std::stod(second); 
+                        map = new OpenMap(LIMIT); 
+                        break;
+                    }
+                    
+                    if(first1 == "chained-") { 
+                        // valid chained 
+                        std::string second = str.substr(8); 
+                        LIMIT = std::stod(second); 
+                        map = new ChainedMap(LIMIT); 
+                        break;
+                    } else {
+                        // Not valid 
+                        usage(1); 
+                    }
                 } else {
                     usage(1);
                 }

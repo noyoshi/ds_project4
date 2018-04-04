@@ -11,17 +11,28 @@
 //              `---'   
 
 ChainedMap::ChainedMap(){
-    hash_table = new std::map<std::string, std::string>[1<<10];
-    table_size = 1<<10;
+    hash_table = new std::map<std::string, std::string>[DEFAULT_TABLE_SIZE];
+    table_size = DEFAULT_TABLE_SIZE;
     nitems = 0;
+    load_limit = DEFAULT_LOAD_FACTOR;
     load_factor = 0;
 }
+
 // Initialized with values 
-ChainedMap::ChainedMap(double f, size_t sz){
+ChainedMap::ChainedMap(double limit){ 
+    hash_table = new std::map<std::string, std::string>[DEFAULT_TABLE_SIZE];
+    table_size = DEFAULT_TABLE_SIZE;
+    nitems = 0;
+    load_limit = limit;
+    load_factor = 0;  
+}
+
+ChainedMap::ChainedMap(double limit, size_t sz){
     hash_table = new std::map<std::string, std::string>[sz];
     table_size = sz;
     nitems = 0;
-    load_factor = f;
+    load_limit = limit; 
+    load_factor = 0;
 }
 
 ChainedMap::~ChainedMap(){
@@ -36,7 +47,7 @@ void            ChainedMap::insert(const std::string &key, const std::string &va
 
     load_factor = ((double) ++nitems) / ((double) table_size);
 
-    if (load_factor > DEFAULT_LOAD_FACTOR)
+    if (load_factor > load_limit)
         resize(table_size * 2);
 }
 
