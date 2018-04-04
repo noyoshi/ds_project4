@@ -74,19 +74,21 @@ const Entry OpenMap::search(const std::string &key) {
 
 void OpenMap::dump(std::ostream &os, DumpFlag flag) {
     for(size_t i = 0; i < table_size; i ++){
-        switch (flag){
-            case(DUMP_KEY):
-                os << hash_table[i].first << '\n';
-                break;
-            case(DUMP_VALUE):
-                os << hash_table[i].second << '\n';
-                break;
-            case(DUMP_KEY_VALUE):
-                os << hash_table[i].first << '\t' << hash_table[i].second << '\n';
-                break;
-            case(DUMP_VALUE_KEY):
-                os << hash_table[i].second << '\t' << hash_table[i].first << '\n';
-                break;
+        if(hash_table[i] != NONE) {
+            switch (flag){
+                case(DUMP_KEY):
+                    os << hash_table[i].first << '\n';
+                    break;
+                case(DUMP_VALUE):
+                    os << hash_table[i].second << '\n';
+                    break;
+                case(DUMP_KEY_VALUE):
+                    os << hash_table[i].first << '\t' << hash_table[i].second << '\n';
+                    break;
+                case(DUMP_VALUE_KEY):
+                    os << hash_table[i].second << '\t' << hash_table[i].first << '\n';
+                    break;
+            }
         }
     }
     
