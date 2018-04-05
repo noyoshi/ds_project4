@@ -180,3 +180,68 @@ Benchmarks
 |       open-1.0|    100000|         inf|     0.10098|
 |       open-1.0|   1000000|         inf|     0.92804|
 |       open-1.0|  10000000|         inf|      10.526|
+
+
+
+|  Backend  |         Text          | File Size |    Elapsed Time    |      Memory      |
+|-----------|-----------------------|-----------|--------------------|------------------|
+|   unsorted|  heart_of_darkness.txt|   233531 B|    6.302319 seconds|   4.023438 Mbytes|
+|     sorted|  heart_of_darkness.txt|   233531 B|    7.354267 seconds|   4.070312 Mbytes|
+|        bst|  heart_of_darkness.txt|   233531 B|    0.115442 seconds|   4.214844 Mbytes|
+|     rbtree|  heart_of_darkness.txt|   233531 B|    0.143937 seconds|   4.351562 Mbytes|
+|      treap|  heart_of_darkness.txt|   233531 B|    0.133658 seconds|   4.210938 Mbytes|
+|  unordered|  heart_of_darkness.txt|   233531 B|    0.076280 seconds|   4.292969 Mbytes|
+|    chained|  heart_of_darkness.txt|   233531 B|    0.099494 seconds|   8.734375 Mbytes|
+|       open|  heart_of_darkness.txt|   233531 B|    0.085701 seconds|   9.046875 Mbytes|
+|   unsorted|      metamorphosis.txt|   141450 B|    1.822316 seconds|   3.562500 Mbytes|
+|     sorted|      metamorphosis.txt|   141450 B|    2.175287 seconds|   3.605469 Mbytes|
+|        bst|      metamorphosis.txt|   141450 B|    0.067584 seconds|   3.726562 Mbytes|
+|     rbtree|      metamorphosis.txt|   141450 B|    0.080264 seconds|   3.839844 Mbytes|
+|      treap|      metamorphosis.txt|   141450 B|    0.073211 seconds|   3.734375 Mbytes|
+|  unordered|      metamorphosis.txt|   141450 B|    0.044674 seconds|   3.828125 Mbytes|
+|    chained|      metamorphosis.txt|   141450 B|    0.064654 seconds|   8.242188 Mbytes|
+|       open|      metamorphosis.txt|   141450 B|    0.059288 seconds|   9.062500 Mbytes|
+|   unsorted|              bible.txt|  4452098 B|  196.639526 seconds|   7.140625 Mbytes|
+|     sorted|              bible.txt|  4452098 B|  600.761963 seconds|   7.015625 Mbytes|
+|        bst|              bible.txt|  4452098 B|    2.065292 seconds|   6.371094 Mbytes|
+|     rbtree|              bible.txt|  4452098 B|    2.666473 seconds|   6.953125 Mbytes|
+|      treap|              bible.txt|  4452098 B|    2.502044 seconds|   6.339844 Mbytes|
+|  unordered|              bible.txt|  4452098 B|    1.398714 seconds|   6.726562 Mbytes|
+|    chained|              bible.txt|  4452098 B|    1.581267 seconds|  80.015625 Mbytes|
+|       open|              bible.txt|  4452098 B|    1.537058 seconds|  99.195312 Mbytes|
+|   unsorted|           sherlock.txt|   594941 B|   19.135134 seconds|   3.988281 Mbytes|
+|     sorted|           sherlock.txt|   594941 B|   31.753948 seconds|   4.042969 Mbytes|
+|        bst|           sherlock.txt|   594941 B|    0.279676 seconds|   4.710938 Mbytes|
+|     rbtree|           sherlock.txt|   594941 B|    0.345151 seconds|   4.921875 Mbytes|
+|      treap|           sherlock.txt|   594941 B|    0.324438 seconds|   4.613281 Mbytes|
+|  unordered|           sherlock.txt|   594941 B|    0.184182 seconds|   4.839844 Mbytes|
+|    chained|           sherlock.txt|   594941 B|    0.268033 seconds|  23.832031 Mbytes|
+|       open|           sherlock.txt|   594941 B|    0.237282 seconds|  27.144531 Mbytes|
+|   unsorted|              iliad.txt|  1201883 B|   78.923630 seconds|   5.062500 Mbytes|
+|     sorted|              iliad.txt|  1201883 B|   99.552567 seconds|   5.070312 Mbytes|
+|        bst|              iliad.txt|  1201883 B|    0.559419 seconds|   5.691406 Mbytes|
+|     rbtree|              iliad.txt|  1201883 B|    0.671491 seconds|   6.128906 Mbytes|
+|      treap|              iliad.txt|  1201883 B|    0.625732 seconds|   5.804688 Mbytes|
+|  unordered|              iliad.txt|  1201883 B|    0.345671 seconds|   5.867188 Mbytes|
+|    chained|              iliad.txt|  1201883 B|    0.425037 seconds|  24.679688 Mbytes|
+|       open|              iliad.txt|  1201883 B|    0.380233 seconds|  27.164062 Mbytes|
+
+
+Discussion
+===
+Looking at the second table, it is apparent that the unordered map implementation outperformed chained and open, with it having 
+faster execution and better memory usage. Then the unordered and the chained implementations had little advantages and disadvantages
+between each other because the chained was more memory efficient, but the open addressing implementation was slightly faster. The 
+differences probably occur because we initialize each bucket to have a large list in the chained implementation and for the open 
+implementation, a lot of memory is used because we need a lot of buckets such that each key, value pair has its own. 
+
+As NITEMS increased, unsurprisingly, the insertion and search times increased because there were more items that had to be parsed through.
+As load factor increased, the times actually start to decrease, but at some point the times start to increase, this suggests that there
+is some sort of optimal load-factor for these implementations. For chained it would be around 5, while for open it would be around 0.5. Lastly
+as the file sizes got bigger, the times also increased, which is also not too surprising considering that there is more items to insert and search
+through.
+
+Out of all eight of the backends, it seems like the unordered implementation is the best. It has the lowest elapsed time when going 
+through the texts, and it was pretty close in memory usage as others that are lower. When comparing the insertion and search times, the 
+insertion times were reasonably lower than others, while the search times were slightly slower than most. However, we value the reduction
+in total elapsed time the most and we valued how the insertion times were much lower than any other implementation. 
