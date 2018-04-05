@@ -6,8 +6,11 @@ Group Dynamics
 ## Group Members
 - Noah Yoshida (nyoshida, Section 02)
     -
+
 - Timothy Blazek (tblazek, Section 02)
-    -
+    - Helped debug the backends, and worked on unordered mapping and chained mapping
+    - Formatted and answered questions on README
+
 - Edward Atkinson (eatkins1, Section 02)
     - Helped with the debugging process
     - Created fully automated python scripts for both benchmarking and
