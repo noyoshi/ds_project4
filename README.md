@@ -1,7 +1,56 @@
-Project 04 
+Project 04 - Key-Value Store II
+===============================
 
+Group Dynamics
+===
+## Group Members
+- Noah Yoshida (nyoshida, Section 02)
+    -
+- Timothy Blazek (tblazek, Section 02)
+    -
+- Edward Atkinson (eatkins1, Section 02)
+    -
 
-2.
+Backend Analysis
+===
+## Unordered
+
+### Average
+Search: O(1)
+Insert: O(1)
+
+### Worst
+Search: O(n)
+Insert: O(n)
+
+On average, the key-value pairs will be spread across different buckets, however, in the worst case they are all put in the same bucket and then there is O(n) search and insert.
+
+## Chained
+
+### Average
+Search: O(1)
+Insert: O(1)
+
+### Worst
+Search: O(n)
+Insert: O(n)
+
+Ideally, all the key-value pairs will be spread across different hashes, so the average is O(1), however, it is possible that they all get hashed to the same list, in which case the insertion and search would be O(n).
+
+## Open
+
+### Average
+Search: O(1)
+Insert: O(1)
+
+### Worst
+Search: O(n)
+Insert: O(n)
+
+In the average case, everything would get hashed to a different spot and so on average, there are little to no collisions. Hence, we have constant time for search and insert. However, if we get a bad hash function that puts assigns everything to the same bucket, then we will need to traverse each consecutive bucket to find or insert a key-value pair.
+
+Benchmarks
+===
 
 |    BACKEND    |  NITEMS  |   INSERT   |   SEARCH   |
 |---------------|----------|------------|------------|
