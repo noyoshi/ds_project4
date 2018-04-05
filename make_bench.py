@@ -5,7 +5,7 @@ from functools import reduce
 import subprocess
 import signal
 
-TIMEOUT = 60
+TIMEOUT = 10
 INF = 'inf'
 
 def main():
@@ -14,7 +14,7 @@ def main():
     data = [['BACKEND', 'NITEMS', 'INSERT', 'SEARCH']]
 
     backends = ['unsorted', 'sorted', 'bst', 'rbtree', 'treap', 'unordered']
-    
+        
     # Append all chained backends
     for lf in ['0.5', '0.75', '1.0', '5.0', '10.0', '100.0']:
         backends.append(f"chained-{lf}")
@@ -31,48 +31,61 @@ def main():
 
     times = {}
 
+    algs = ['Insert', 'Search']
+
     for b in backends:
         times[b] = [0, 0]
 
-    for test in tests:
-        args = ['./map_bench', '-b', test['back'], '-n', test['nitems']]
-        testData = [test['back'], test['nitems']]
+    try:
+        for test in tests:
+            args = ['./map_bench', '-b', test['back'], '-n', test['nitems']]
+            testData = [test['back'], test['nitems']]
 
-        process = subprocess.Popen(args, stdout=subprocess.PIPE)
-        print(f"./map_bench -b {test['back']} -n {test['nitems']}...")
-        
-        testTimes = times[test['back']]
-        print(testTimes)
-        if testTimes and testTimes[0] == INF and testTimes[1] == INF:
-            testData.append(INF)
-            testData.append(INF)
-        else:
-            i = 0
-            while True:
-                line = process.stdout.readline()
-                if line:
-                    line = line.rstrip().decode('ascii').split()
-                    time = line[1]
+            process = subprocess.Popen(args, stdout=subprocess.PIPE)
+            print(f"./map_bench -b {test['back']} -n {test['nitems']}...")
+            
+            testTimes = times[test['back']]
+            if testTimes and testTimes[0] == INF and testTimes[1] == INF:
+                testData.append(INF)
+                testData.append(INF)
+            else:
+                i = 0
+                while True:
                     try:
-                        float(time)
-                        if float(time) > TIMEOUT:
-                            time = INF
-                    except:
-                        pass
+                        line = process.stdout.readline()
+                        if line:
+                            line = line.rstrip().decode('ascii').split()
+                            time = line[1]
+                            try:
+                                if float(time) > TIMEOUT:
+                                    time = INF
+                            except:
+                                pass
 
-                    testData.append(time)
+                            testData.append(time)
 
-                    print(f"{line[0]} {time}")
-                    times[test['back']][i] = time
-                    i += 1
-                else:
-                    break
-        data.append(testData)
+                            print(f"{algs[i]}: {time}")
+                            times[test['back']][i] = time
+                            i += 1
+                            signal.alarm(TIMEOUT)
+                        else:
+                            break
+                    except Exception:
+                        process.kill()
+                        time = 'inf'
+                        testData.append(time)
 
-        print(testData)
-        print()
+                        print(f"{algs[i]}: {time}")
+                        times[test['back']][i] = time
+                signal.alarm(0)
 
-    printTable("bench_data.txt", data)
+            data.append(testData)
+
+            print()
+
+        printTable("bench_data.txt", data)
+    except KeyboardInterrupt:
+        printTable("bench_data.txt", data)
 
 
 def timeout(signum, frame):
