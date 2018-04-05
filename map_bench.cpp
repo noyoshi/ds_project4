@@ -15,6 +15,11 @@
 
 typedef std::chrono::high_resolution_clock  Clock;
 
+enum MODE {
+    INSERT = (1 << 0),
+    SEARCH = (1 << 1)
+};
+
 // Utility functions -----------------------------------------------------------
 
 
@@ -27,10 +32,10 @@ void usage(int status) {
     exit(status);
 }
 
-void parse_command_line_options(int argc, char *argv[], Map *&map, int &nitems, int &padlength) {
+void parse_command_line_options(int argc, char *argv[], Map *&map, int &nitems, int &padlength, int &mode) {
     int c;
 
-    while ((c = getopt(argc, argv, "hb:n:p:")) != -1) {
+    while ((c = getopt(argc, argv, "hb:n:p:m:")) != -1) {
         std::string str(optarg); 
         switch (c) {
             case 'b':
@@ -91,6 +96,13 @@ void parse_command_line_options(int argc, char *argv[], Map *&map, int &nitems, 
             case 'h':
                 usage(0);
                 break;
+            case 'm':
+                mode = 0;
+                if (str.find("i") != std::string::npos)
+                    mode |= INSERT;
+                if (str.find("s") != std::string::npos)
+                    mode |= SEARCH;
+                break;
             default:
                 usage(1);
                 break;
@@ -115,31 +127,36 @@ int main(int argc, char *argv[]) {
     Map *map       = nullptr;
     int  nitems    = 1;
     int  padlength = 1;
+    int  mode = INSERT | SEARCH;
 
-    parse_command_line_options(argc, argv, map, nitems, padlength);
+    parse_command_line_options(argc, argv, map, nitems, padlength, mode);
 
     // Insert
-    auto insert_start = Clock::now();
-    for (int i = 0; i < nitems; i++) {
-        std::string k = int_to_key(i, padlength);
-        std::string v = k;
-        map->insert(k, v);
-    }
-    auto insert_stop  = Clock::now();
-    auto insert_diff  = insert_stop - insert_start;
+    if (mode & INSERT) {
+        auto insert_start = Clock::now();
+        for (int i = 0; i < nitems; i++) {
+            std::string k = int_to_key(i, padlength);
+            std::string v = k;
+            map->insert(k, v);
+        }
+        auto insert_stop  = Clock::now();
+        auto insert_diff  = insert_stop - insert_start;
 
-    std::cout << "Insert: " << std::setprecision(5) << std::chrono::duration<double>(insert_diff).count() << " s" << std::endl;
+        std::cout << "Insert: " << std::setprecision(5) << std::chrono::duration<double>(insert_diff).count() << " s" << std::endl;
+    }
 
     // Search
-    auto search_start = Clock::now();
-    for (int i = 0; i < nitems; i++) {
-        std::string k = int_to_key(i, padlength);
-        map->search(k);
-    }
-    auto search_stop  = Clock::now();
-    auto search_diff  = search_stop - search_start;
+    if (mode & SEARCH) {
+        auto search_start = Clock::now();
+        for (int i = 0; i < nitems; i++) {
+            std::string k = int_to_key(i, padlength);
+            map->search(k);
+        }
+        auto search_stop  = Clock::now();
+        auto search_diff  = search_stop - search_start;
 
-    std::cout << "Search: " << std::setprecision(5) << std::chrono::duration<double>(search_diff).count() << " s" << std::endl;
+        std::cout << "Search: " << std::setprecision(5) << std::chrono::duration<double>(search_diff).count() << " s" << std::endl;
+    }
 
     delete map;
     return 0;

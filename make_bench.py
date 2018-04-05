@@ -5,7 +5,7 @@ from functools import reduce
 import subprocess
 import signal
 
-TIMEOUT = 10
+TIMEOUT = 60
 INF = 'inf'
 
 def main():
@@ -40,17 +40,19 @@ def main():
         for test in tests:
             args = ['./map_bench', '-b', test['back'], '-n', test['nitems']]
             testData = [test['back'], test['nitems']]
-
-            process = subprocess.Popen(args, stdout=subprocess.PIPE)
-            print(f"./map_bench -b {test['back']} -n {test['nitems']}...")
-            
             testTimes = times[test['back']]
-            if testTimes and testTimes[0] == INF and testTimes[1] == INF:
-                testData.append(INF)
-                testData.append(INF)
-            else:
-                i = 0
-                while True:
+
+            print("{}...".format(' '.join(args)))
+
+            for i, alg in enumerate([['-m', 'i'], ['-m', 's']]):
+                newArgs = [*args, *alg]
+                process = subprocess.Popen(newArgs, stdout=subprocess.PIPE)
+            
+                if testTimes and testTimes[i] == INF:
+                    testData.append(INF)
+                    print(f"{algs[i]}: INF")
+                else:
+                    signal.alarm(TIMEOUT)
                     try:
                         line = process.stdout.readline()
                         if line:
@@ -67,16 +69,13 @@ def main():
                             print(f"{algs[i]}: {time}")
                             times[test['back']][i] = time
                             i += 1
-                            signal.alarm(TIMEOUT)
                         else:
                             break
                     except Exception:
                         process.kill()
-                        time = 'inf'
-                        testData.append(time)
-
-                        print(f"{algs[i]}: {time}")
-                        times[test['back']][i] = time
+                        testData.append(INF)
+                        print(f"{algs[i]}: INF")
+                        times[test['back']][i] = INF
                 signal.alarm(0)
 
             data.append(testData)
