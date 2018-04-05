@@ -54,7 +54,7 @@ def main():
                 else:
                     signal.alarm(TIMEOUT)
                     try:
-                        line = process.stdout.readline()
+                        line = process.communicate()
                         if line:
                             line = line.rstrip().decode('ascii').split()
                             time = line[1]
