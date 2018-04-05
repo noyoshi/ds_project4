@@ -5,7 +5,7 @@ Group Dynamics
 ===
 ## Group Members
 - Noah Yoshida (nyoshida, Section 02)
-    -
+    - Derp
 
 - Timothy Blazek (tblazek, Section 02)
     - Helped debug the backends, and worked on unordered mapping and chained mapping
