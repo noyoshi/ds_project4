@@ -9,7 +9,10 @@ Group Dynamics
 - Timothy Blazek (tblazek, Section 02)
     -
 - Edward Atkinson (eatkins1, Section 02)
-    -
+    - Helped with the debugging process
+    - Created fully automated python scripts for both benchmarking and
+      frequencies, which when run generate a fully completed markdown table
+
 
 Backend Analysis
 ===
@@ -181,18 +184,19 @@ Benchmarks
 |       open-1.0|   1000000|         inf|     0.92804|
 |       open-1.0|  10000000|         inf|      10.526|
 
-
+Frequencies
+===
 
 |  Backend  |         Text          | File Size |    Elapsed Time    |      Memory      |
 |-----------|-----------------------|-----------|--------------------|------------------|
-|   unsorted|  heart_of_darkness.txt|   233531 B|    6.302319 seconds|   4.023438 Mbytes|
-|     sorted|  heart_of_darkness.txt|   233531 B|    7.354267 seconds|   4.070312 Mbytes|
-|        bst|  heart_of_darkness.txt|   233531 B|    0.115442 seconds|   4.214844 Mbytes|
-|     rbtree|  heart_of_darkness.txt|   233531 B|    0.143937 seconds|   4.351562 Mbytes|
-|      treap|  heart_of_darkness.txt|   233531 B|    0.133658 seconds|   4.210938 Mbytes|
-|  unordered|  heart_of_darkness.txt|   233531 B|    0.076280 seconds|   4.292969 Mbytes|
-|    chained|  heart_of_darkness.txt|   233531 B|    0.099494 seconds|   8.734375 Mbytes|
-|       open|  heart_of_darkness.txt|   233531 B|    0.085701 seconds|   9.046875 Mbytes|
+|   unsorted|  heart\_of\_darkness.txt|   233531 B|    6.302319 seconds|   4.023438 Mbytes|
+|     sorted|  heart\_of\_darkness.txt|   233531 B|    7.354267 seconds|   4.070312 Mbytes|
+|        bst|  heart\_of\_darkness.txt|   233531 B|    0.115442 seconds|   4.214844 Mbytes|
+|     rbtree|  heart\_of\_darkness.txt|   233531 B|    0.143937 seconds|   4.351562 Mbytes|
+|      treap|  heart\_of\_darkness.txt|   233531 B|    0.133658 seconds|   4.210938 Mbytes|
+|  unordered|  heart\_of\_darkness.txt|   233531 B|    0.076280 seconds|   4.292969 Mbytes|
+|    chained|  heart\_of\_darkness.txt|   233531 B|    0.099494 seconds|   8.734375 Mbytes|
+|       open|  heart\_of\_darkness.txt|   233531 B|    0.085701 seconds|   9.046875 Mbytes|
 |   unsorted|      metamorphosis.txt|   141450 B|    1.822316 seconds|   3.562500 Mbytes|
 |     sorted|      metamorphosis.txt|   141450 B|    2.175287 seconds|   3.605469 Mbytes|
 |        bst|      metamorphosis.txt|   141450 B|    0.067584 seconds|   3.726562 Mbytes|
