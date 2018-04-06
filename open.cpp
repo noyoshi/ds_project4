@@ -5,7 +5,7 @@
 
 #include <stdexcept>
 
-// If you are board try figuring this message out ^_^
+// If you are bored try figuring this message out ^_^
 // Ly8gICAgICAgICAgICAgIF9fICAgICANCi8vICAod29vZikgLS0gPChvIClfX18gDQovLyAgICAgICAgICAgICAoIC5fPiAvIA0KLy8gICAgICAgICAgICAgIGAtLS0nICAg 
 
 OpenMap::OpenMap(){
