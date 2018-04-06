@@ -5,7 +5,8 @@ Group Dynamics
 ===
 ## Group Members
 - Noah Yoshida (nyoshida, Section 02)
-    - Derp
+    - Wrote the chained backend with Tim, and wrote the open backend
+    - Edited the benchmarking and frequency testing programs to support new backends
 
 - Timothy Blazek (tblazek, Section 02)
     - Helped debug the backends, and worked on unordered mapping and chained mapping
