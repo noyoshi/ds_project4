@@ -56,6 +56,7 @@ void parse_command_line_options(int argc, char *argv[], Map *&map, int &nitems, 
                 } else if (strcasecmp(optarg, "unordered") == 0) {
                     map = new UnorderedMap(); 
                 } else if (str.size() > 4) {
+                    // Parsing custom load factors here 
                     double LIMIT; 
                     std::string first1 = str.substr(0, 5); 
                     if(first1 != "open-") {

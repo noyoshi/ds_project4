@@ -5,6 +5,7 @@
 
 #include <stdexcept>
 
+// If you are board try figuring this message out ^_^
 // Ly8gICAgICAgICAgICAgIF9fICAgICANCi8vICAod29vZikgLS0gPChvIClfX18gDQovLyAgICAgICAgICAgICAoIC5fPiAvIA0KLy8gICAgICAgICAgICAgIGAtLS0nICAg 
 
 OpenMap::OpenMap(){
@@ -49,14 +50,11 @@ OpenMap::~OpenMap(){
 }
 // Methods --------------------------------------------------------------------
 
-
 void OpenMap::insert(const std::string &key, const std::string &value) {
-    // size_t hash_key = hash_function(key) % table_size;
-
     size_t hash_key = locate(key); 
     hash_table[hash_key] = std::make_pair(key, value);
     
-
+    // Calculates the load factor 
     load_factor = ((double) ++nitems) / ((double) table_size);
 
     if (load_factor > load_limit)
@@ -64,7 +62,6 @@ void OpenMap::insert(const std::string &key, const std::string &value) {
 }
 
 const Entry OpenMap::search(const std::string &key) {
-    // size_t hash_key = hash_function(key) % table_size;
     size_t i = locate(key); 
     
     if(hash_table[i].first == key) return hash_table[i]; 
@@ -95,8 +92,7 @@ void OpenMap::dump(std::ostream &os, DumpFlag flag) {
 }
 
 size_t OpenMap::locate(const std::string &key) {
-    // Returns the index where a key is stored herp derp 
-    // Herp derp i think this works kappa 
+    // Returns the index where a key is stored 
     size_t hash_key = hash_function(key) % table_size;
 
     while(hash_table[hash_key] != NONE){
@@ -120,7 +116,7 @@ void OpenMap::resize(const size_t new_size) {
     auto old_table = hash_table;
     hash_table = new Entry [table_size];
 
-    // Initialzes everything to NONE 
+    // Initialzes everything in the table to NONE 
     for(size_t i = 0; i < table_size; i ++)
         hash_table[i] = NONE; 
 

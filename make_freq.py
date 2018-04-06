@@ -32,7 +32,6 @@ def main():
 
                 command = f"./measure ./frequencies -b {back} < texts/{name}"
                 fSize = "{} B".format(os.stat(f"texts/{name}").st_size)
-                #fSize = os.popen(f"stat --format=%s texts/{name}").read().rstrip()
                 testData = [back, name, fSize]
 
                 print("{}...".format(command))

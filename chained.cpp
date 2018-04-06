@@ -27,6 +27,7 @@ ChainedMap::ChainedMap(double limit){
     load_factor = 0;  
 }
 
+// Initializes with custom load limit and custom size 
 ChainedMap::ChainedMap(double limit, size_t sz){
     hash_table = new std::map<std::string, std::string>[sz];
     table_size = sz;
@@ -54,8 +55,10 @@ void            ChainedMap::insert(const std::string &key, const std::string &va
 const Entry     ChainedMap::search(const std::string &key) {
     size_t hash_key = hash_function(key) % table_size;
 
+    // Bucket corresponding to the key is empty 
     if(hash_table[hash_key].empty()) return NONE;
 
+    // Finding if the key is in that bucket 
     auto   it = hash_table[hash_key].find(key);
     if(it != hash_table[hash_key].end()) return *it;
 
@@ -92,6 +95,7 @@ void            ChainedMap::resize(const size_t new_size) {
     auto old_table = hash_table;
     hash_table = new std::map<std::string, std::string>[table_size];
 
+    // Copies over values from the old table into the new table 
     for(size_t i = 0; i < old_size; i ++){
         for(auto it = old_table[i].begin(); it != old_table[i].end(); it++){
             insert(it->first, it->second);
